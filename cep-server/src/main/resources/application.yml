@@ -4,7 +4,7 @@ cep:
     estadoZip: estados.cepaberto.zip
     cidadeZip: cidades.cepaberto.zip
   maps:
-    apiKey: AIzaSyDs2qcXHM2IKN6ZPJi9chF6SNVmYcvGpNE
+    apiKey: <SUA_CHAVE>
     enabled: true
   redis:
     hostname: localhost
