@@ -1,0 +1,25 @@
+#use this when there is not a eureka instance running
+cep-service:
+  ribbon:
+    listOfServers: localhost:8080
+
+feign:
+  hystrix:
+    enabled: true
+
+ribbon:
+  ReadTimeout: 60000
+  ConnectTimeout: 60000
+
+hystrix:
+  shareSecurityContext: true
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: false
+
+server:
+  port: 9080
+  compression:
+    enabled: true

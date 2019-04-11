@@ -1,0 +1,32 @@
+version: "3.4"
+services:
+  redis:
+    image: redis
+    networks:
+      - cep
+      
+  mongodb:
+    image: mongo
+    networks:
+      - cep
+  
+  app:
+    build: 
+      context: .
+      dockerfile: src/main/docker/Dockerfile
+      args:
+        JAR_FILE: target/app.jar
+        UTIL_DIR: src/main/docker/
+    volumes: 
+      - ./src/main/resources/cepaberto:/root/cepaberto
+        
+    ports:
+      - "8080:8080"
+    environment:
+      - WAIT_FOR_IT=mongodb:27017 redis:6379
+      - JAVA_OPTS=-Xmx256m -Xms128m -Dspring.profiles.active=docker-compose
+    networks:
+      - cep  
+
+networks:
+    cep:

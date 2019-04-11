@@ -1,0 +1,51 @@
+cep:
+  cepaberto:
+    diretorio: ${HOME}/cepaberto
+    estadoZip: estados.cepaberto.zip
+    cidadeZip: cidades.cepaberto.zip
+  maps:
+    apiKey: AIzaSyDs2qcXHM2IKN6ZPJi9chF6SNVmYcvGpNE
+    enabled: true
+  redis:
+    hostname: localhost
+    port: 6379
+  mongodb:
+    hostname: localhost
+    port: 27017
+    database: cep
+
+server:
+  port: 8080
+  compression:
+    enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: ALWAYS
+
+---
+spring:
+  profiles: docker-compose
+server:
+  port: 8080
+cep:
+  redis:
+    hostname: redis
+    port: 6379
+  mongodb:
+    hostname: mongodb
+    port: 27017
+    database: cep
+---
+spring:
+  profiles: test
+cep:
+  cepaberto:
+    diretorio: ./src/test/resources/cepaberto
+    estadoZip: estados.cepaberto.zip
+    cidadeZip: cidades.cepaberto.zip
