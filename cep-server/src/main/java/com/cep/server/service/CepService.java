@@ -3,6 +3,7 @@ package com.cep.server.service;
 import com.cep.server.dto.CountDTO;
 import com.cep.server.model.Cep;
 import com.cep.server.repository.CepRepository;
+import lombok.extern.slf4j.Slf4j;
 import net.logstash.logback.encoder.org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Slf4j
 public class CepService {
 
     @Value("${cep.maps.enabled}")
@@ -46,7 +48,7 @@ public class CepService {
         return CountDTO.builder().number(cepRepository.count()).build();
     }
 
-    @Cacheable(value = "cep", key = "#data", condition = "false")
+    @Cacheable(value = "cep", key = "#data", condition = "!#root.target.getGeoEnabled()")
     public List<Cep> find(String data) {
         List<Cep> ret = new ArrayList<>();
         if (data.length() <= 3) {
@@ -68,6 +70,7 @@ public class CepService {
         return ret;
     }
 
-
-
+    public Boolean getGeoEnabled() {
+        return geoEnabled;
+    }
 }
