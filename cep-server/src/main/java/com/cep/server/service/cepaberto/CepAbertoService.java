@@ -3,6 +3,7 @@ package com.cep.server.service.cepaberto;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -35,7 +36,7 @@ public class CepAbertoService {
     @Autowired
     private CepRepository cepRepository;
 
-    @CacheEvict(allEntries = true, cacheNames = {"cep"})
+    @CacheEvict(allEntries = true, cacheNames = {"cep", "cepCount"})
     public void build() throws IOException {
 
         List<EstadoDTO> estados = readEstados();
@@ -63,6 +64,7 @@ public class CepAbertoService {
 
                     Cep cep = new Cep();
 
+                    cep.setRefreshedAt(LocalDateTime.now());
                     cep.setCep(record.get(0));
                     cep.setLogradouro(record.get(1));
                     cep.setBairro(record.get(2));

@@ -2,8 +2,8 @@ package com.cep.test.service;
 
 import com.cep.server.model.Cep;
 import com.cep.server.repository.CepRepository;
+import com.cep.server.service.CepGeoService;
 import com.cep.server.service.CepService;
-import com.cep.server.service.maps.GeoService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -21,11 +21,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import static com.cep.test.helper.CepBuilder.createCompleteCep;
-import static com.cep.test.helper.LocationBuilder.createBasicLocation;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 @RunWith(SpringRunner.class)
 @TestPropertySource(properties = {
@@ -50,7 +51,7 @@ public class CepServiceTest {
     private CepRepository repository;
 
     @MockBean
-    private GeoService geoService;
+    private CepGeoService cepGeoService;
 
     @Rule
     public ExpectedException exceptionExpect = ExpectedException.none();
@@ -67,7 +68,8 @@ public class CepServiceTest {
                         )
                 );
 
-        given(geoService.findLatLongByIndex(any(String.class))).willReturn(createBasicLocation());
+        given(cepGeoService.computeLocation(any(String.class), any(List.class)))
+                .willReturn(null);
     }
 
 
@@ -89,9 +91,8 @@ public class CepServiceTest {
         Assert.assertEquals("123 12345678", ret.getId());
         Assert.assertEquals("12345678", ret.getCep());
 
+        verify(cepGeoService).computeLocation(any(String.class), any(List.class));
 
-        Assert.assertEquals(new Double(1d), ret.getLocation().getLat());
-        Assert.assertEquals(new Double(2d), ret.getLocation().getLng());
 
     }
 
@@ -121,8 +122,6 @@ public class CepServiceTest {
         Assert.assertEquals("123 98765432", ret.getId());
         Assert.assertEquals("98765432", ret.getCep());
 
-        Assert.assertEquals(new Double(1d), ret.getLocation().getLat());
-        Assert.assertEquals(new Double(2d), ret.getLocation().getLng());
         ret = list.get(1);
 
         Assert.assertTrue(ret != null);
@@ -134,8 +133,8 @@ public class CepServiceTest {
         Assert.assertEquals("123 98765431", ret.getId());
         Assert.assertEquals("98765431", ret.getCep());
 
-        Assert.assertEquals(new Double(1d), ret.getLocation().getLat());
-        Assert.assertEquals(new Double(2d), ret.getLocation().getLng());
+        verify(cepGeoService).computeLocation(any(String.class), any(List.class));
+
     }
 
 

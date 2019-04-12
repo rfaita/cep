@@ -25,11 +25,12 @@ public class GeoService {
             GeocodingResult[] results = GeocodingApi.newRequest(context).address(index).await();
 
             if (results != null && results.length > 0) {
-                Location ret = new Location();
-                ret.setLat(results[0].geometry.location.lat);
-                ret.setLng(results[0].geometry.location.lng);
+                log.info("Location found: {}", results);
 
-                return ret;
+                return Location.builder()
+                        .lat(results[0].geometry.location.lat)
+                        .lng(results[0].geometry.location.lng)
+                        .build();
             } else {
                 throw new ValidationException("Result not found");
             }

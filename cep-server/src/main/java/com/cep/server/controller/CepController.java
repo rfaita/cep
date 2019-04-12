@@ -1,5 +1,6 @@
 package com.cep.server.controller;
 
+import com.cep.server.dto.CountDTO;
 import com.cep.server.model.Cep;
 import com.cep.server.service.CepService;
 import com.cep.shared.contract.CepContract;
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.TypeDescriptor;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,6 +44,14 @@ public class CepController implements CepContract {
 
         return EnvelopeDTO.<List<CepDTO>>builder()
                 .data(ret)
+                .build();
+    }
+
+    @GetMapping(value = "cepCount")
+    @ApiOperation(value = "Quantidade de CEP cadastrados na base atualmente.")
+    public EnvelopeDTO<CountDTO> count() {
+        return EnvelopeDTO.<CountDTO>builder()
+                .data(cepService.count())
                 .build();
     }
 
