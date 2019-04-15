@@ -7,4 +7,4 @@
 
 :: 🖥️  Cep MicroService - Criado por Rafael Faita:: Rodando Spring Boot ${spring-boot.version} ::
 :: ⚓  http://github.com/rfaita/cep ::
-:: ⚓  rfaita@gmail.com ::
+:: 📨  rfaita@gmail.com ::
